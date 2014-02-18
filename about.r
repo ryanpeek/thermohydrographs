@@ -1,8 +1,8 @@
 function(){
 	tabPanel("About",
 		p(style="text-align:justify",'This web application uses data collected by the Center for Watershed Sciences at UC Davis
-    as part of long-term Sierra Nevada River monitoring initiated by a California Energy Comission Project. Solinst pressure transducer 
-    deployed in 5 rivers have been logging data at 15 min intervals for the last 3 years. Collection of observed data through 
+    as part of long-term Sierra Nevada River monitoring project, building on a previous California Energy Comission Project. Solinst pressure transducers 
+    have been deployed (since 2011) in 5 rivers and are logging water temperature and stage at 15 min intervals. Collection of observed data through 
     monitoring is a vital tool for assessing change in aquatic ecosystems, particularly in relation to climate warming and river
     regulation. This app illustrates a few useful ways to summarize and plot these data. 
     Thermohydrographs are a way to show both stage (level) and water temperature on a single plot. Depending on river and interval
@@ -37,7 +37,14 @@ function(){
 # 				HTML('</ul>')),
 # 				br()
 # 			),
-			div(class="span4",
+		div(class="span4",
+        strong('Code'),
+        p('Source code available:',
+          a("Here", href="https://github.com/ryan-ucd/thermohydrographs",target="_blank")),
+        br()
+      ),
+
+    div(class="span4",
 				strong('References'),
 				p(HTML('<ul>'),
 				  HTML('<li>'),a('Management of the Spring Recession Project', href="https://watershed.ucdavis.edu/project/recession", target="_blank"),HTML('</li>'),

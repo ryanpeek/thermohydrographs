@@ -23,23 +23,26 @@ shinyUI(pageWithSidebar(
   
   # Sidebar with file input option and checkbox for header
   sidebarPanel(
-    h3("Data Input"),
+    h4("Select a River and Logging Interval: "),
     
     selectInput("sites","Sites",
-                list("NF American" = "NFA", "MF American" = "MFA", "Rubicon" = "RUB", 
-                     "NF Yuba" = "NFY", "SF Yuba" = "SFY")),
-    selectInput("interval","Interval",
+                list("NF American (unreg)" = "NFA", "MF American (reg)" = "MFA", "Rubicon (reg)" = "RUB", 
+                     "NF Yuba (unreg)" = "NFY", "SF Yuba (reg)" = "SFY")),
+    selectInput("interval","Logging Interval",
                 list("Hourly" = "hourly", "Daily" = "daily", "7-day Avg" = "d7")),
     
-#         h5("Months"),
-#       sliderInput("mons","",1,12,c(4,8),step=1,format="#"),
+    h6("Select year(s):"),
+
+    checkboxGroupInput(inputId="years","Available Years",choices=c(2011,2012,2013),selected=c(2011,2012,2013)),
            
     tags$hr(),
     
     downloadButton('downloadData', 'Download as csv'),
     tags$hr(),
-    helpText('For the logger data, we can select variables to show in the table,
-             sort variables, and customize the display of rows per page.')
+    helpText('These plots represent stage (y-axis) and water temperature (color). 
+              Regulated ("reg") sites are reaches with hydropower dams/operations, unregulated ("unreg")
+              represent "natural" flow conditions in the Sierra Nevada. Click on other tabs to view summary data
+              and more about our monitoring/research.')
         
   ),
 

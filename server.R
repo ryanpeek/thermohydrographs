@@ -4,21 +4,21 @@ shinyServer(function(input, output) {
   
   data <- reactive({
     if(input$interval=="hourly"){
-      h <- hourly[hourly$site %in% input$sites,]
+      h <- hourly[hourly$site %in% input$sites & hourly$year %in% input$years,]
       h
-    } else{
+    } else {
       if(input$interval=="daily"){
-        d <- daily[daily$site %in% input$sites,]
+        d <- daily[daily$site %in% input$sites & daily$year %in% input$years,]
         d
       } else {
         if(input$interval=="d7"){
-          d7 <- daily[daily$site %in% input$sites,c(1,4:7,12:17)]
+          d7 <- daily[daily$site %in% input$sites & daily$year %in% input$years, c(1,4:7,12:17)]
           d7
         }
       }
     }
-  })        
-    
+  })
+  
   # a large table reactive to input
   output$mytable1 = renderDataTable({
     datatab<-data()
