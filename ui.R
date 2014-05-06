@@ -27,7 +27,8 @@ shinyUI(pageWithSidebar(
     
     selectInput("sites","Sites",
                 list("NF American (unreg)" = "NFA", "MF American (reg)" = "MFA", "Rubicon (reg)" = "RUB", 
-                     "NF Yuba (unreg)" = "NFY", "SF Yuba (reg)" = "SFY")),
+                     "NF Yuba (unreg)" = "NFY", "SF Yuba (reg)" = "SFY", "Clavey (unreg)" = "CLA", 
+                     "Tuolumne at Clavey (reg)"= "TUO")),
     selectInput("interval","Logging Interval",
                 list("Hourly" = "hourly", "Daily" = "daily", "7-day Avg" = "d7")),
     
