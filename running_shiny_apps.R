@@ -23,3 +23,5 @@ xlarge			 2048 MB
 xxlarge			 4096 MB
 
 shinyapps::configureApp(APPNAME, size="medium")
+
+# ryan-ucd "R00neySc0res!"
