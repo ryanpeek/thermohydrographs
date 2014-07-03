@@ -34,7 +34,7 @@ shinyUI(pageWithSidebar(
     
     h6("Select year(s):"),
 
-    checkboxGroupInput(inputId="years","Available Years",choices=c(2011,2012,2013),selected=c(2011,2012,2013)),
+    checkboxGroupInput(inputId="years","Available Years",choices=c(2011,2012,2013,2014),selected=c(2011,2012,2013,2014)),
            
     tags$hr(),
     

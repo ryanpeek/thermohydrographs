@@ -53,7 +53,7 @@ shinyServer(function(input, output) {
                        scale_x_datetime(breaks=date_breaks("1 months"),labels = date_format("%b-%y"))+
                        scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette),
                                               values=breaks, rescaler = function(x, ...) x, 
-                                              oob = identity,limits=c(0,28), breaks=breaks, 
+                                              oob = identity,limits=c(0,30), breaks=breaks, 
                                               space="Lab") +theme_bw() + 
                        labs(title="Hourly Thermohydrograph")+
                        theme(axis.text.x = element_text(angle = 45, hjust = 1)))
@@ -69,7 +69,7 @@ shinyServer(function(input, output) {
                       scale_x_datetime(breaks=date_breaks("1 months"),labels = date_format("%b-%y"))+
                       scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette), 
                                              values=breaks, rescaler = function(x, ...) x, 
-                                             oob = identity,limits=c(0,28), breaks=breaks, 
+                                             oob = identity,limits=c(0,30), breaks=breaks, 
                                              space="Lab") +theme_bw() + 
                       labs(title="Daily Thermohydrograph")+
                       theme(axis.text.x = element_text(angle = 45, hjust = 1)))
@@ -84,7 +84,7 @@ shinyServer(function(input, output) {
                          scale_x_datetime(breaks=date_breaks("1 months"),labels = date_format("%b-%y"))+
                          scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette), 
                                                 values=breaks, rescaler = function(x, ...) x, 
-                                                oob = identity,limits=c(0,28), breaks=breaks, 
+                                                oob = identity,limits=c(0,30), breaks=breaks, 
                                                 space="Lab") +theme_bw() + 
                          labs(title="7 Day Average Thermohydrograph")+
                          theme(axis.text.x = element_text(angle = 45, hjust = 1)))
@@ -104,7 +104,7 @@ shinyServer(function(input, output) {
         scale_x_datetime(breaks=date_breaks("2 weeks"),labels = date_format("%m-%d"))+
         scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette),
                                values=breaks, rescaler = function(x, ...) x,
-                               oob = identity,limits=c(0,28), breaks=breaks, space="Lab") +
+                               oob = identity,limits=c(0,30), breaks=breaks, space="Lab") +
         theme_bw() + labs(title="Hourly Water Temps")+ theme(axis.text.x = element_text(angle = 45, hjust = 1))      
       print(thermo1 + facet_grid(.~year,scales="free",drop=T))
     } else {
@@ -116,7 +116,7 @@ shinyServer(function(input, output) {
           scale_x_datetime(breaks=date_breaks("2 weeks"),labels = date_format("%m-%d"))+
           scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette),
                                  values=breaks, rescaler = function(x, ...) x,
-                                 oob = identity,limits=c(0,28), breaks=breaks, space="Lab") +
+                                 oob = identity,limits=c(0,30), breaks=breaks, space="Lab") +
           theme_bw() + labs(title="Daily Water Temps")+ theme(axis.text.x = element_text(angle = 45, hjust = 1))      
         print(thermo2 + facet_grid(.~year,scales="free",drop=T))        
       } else {
@@ -128,7 +128,7 @@ shinyServer(function(input, output) {
             scale_x_datetime(breaks=date_breaks("2 weeks"),labels = date_format("%m-%d"))+
             scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette),
                                    values=breaks, rescaler = function(x, ...) x,
-                                   oob = identity,limits=c(0,28), breaks=breaks, space="Lab") +
+                                   oob = identity,limits=c(0,30), breaks=breaks, space="Lab") +
             theme_bw() + labs(title="7-Day Average Water Temps")+ theme(axis.text.x = element_text(angle = 45, hjust = 1))      
           print(thermo3 + facet_grid(.~year,scales="free",drop=T))          
         }
