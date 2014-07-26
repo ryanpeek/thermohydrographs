@@ -137,11 +137,13 @@ shinyServer(function(input, output) {
   })
   
   output$plot3 <- renderPlot({
-    df <- data()    
+    df <- data()
+    df <- df[df$mon>=6 & df$mon<=8,]
     if (input$interval=="d7") {      
       d7plot<-ggplot()+ geom_line(data=df,aes(x=Datetime, y=Temperature.7),colour="black", size=0.75,alpha=1)+
         geom_line(data=df,aes(x=Datetime, y=temp.max.7),colour="red", size=0.65,lty=2,alpha=1)+
         scale_y_continuous(breaks=seq(0,30,3),labels=seq(0,30,3))+theme_bw()+
+        ylab(expression("Water Temperature (" * degree * "C)")) + xlab("") +
         labs(title="7-Day Average Water Temps")+ theme(axis.text.x = element_text(angle = 45, hjust = 1))+
         scale_x_datetime(breaks=date_breaks("1 month"),labels = date_format("%m-%y"))+
         geom_line(data=df,aes(x=Datetime, y=temp.min.7),colour="navyblue", size=0.65,lty=2,alpha=1)
@@ -152,6 +154,7 @@ shinyServer(function(input, output) {
         dplot<-ggplot()+ geom_line(data=df,aes(x=Datetime, y=Temperature),colour="black", size=0.75,alpha=1)+
           geom_line(data=df,aes(x=Datetime, y=temp.max),colour="red", size=0.65,lty=2,alpha=1)+
           scale_y_continuous(breaks=seq(0,30,3),labels=seq(0,30,3))+theme_bw()+
+          ylab(expression("Water Temperature (" * degree * "C)")) + xlab("") +
           labs(title="Daily Mean/Max/Min Water Temps")+ theme(axis.text.x = element_text(angle = 45, hjust = 1))+
           scale_x_datetime(breaks=date_breaks("1 month"),labels = date_format("%m-%y"))+
           geom_line(data=df,aes(x=Datetime, y=temp.min),colour="navyblue", size=0.65,lty=2,alpha=1)

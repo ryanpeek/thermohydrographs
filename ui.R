@@ -41,7 +41,7 @@ shinyUI(pageWithSidebar(
     downloadButton('downloadData', 'Download as csv'),
     tags$hr(),
     helpText('These plots represent stage (y-axis) and water temperature (color). 
-              Regulated ("reg") sites are reaches with hydropower dams/operations, unregulated ("unreg")
+              Regulated ("reg") sites are reaches with hydropower flows, unregulated ("unreg")
               represent "natural" flow conditions in the Sierra Nevada. Click on other tabs to view summary data
               and more about our monitoring/research.')
         
