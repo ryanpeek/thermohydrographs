@@ -7,22 +7,23 @@ headerPanel_2 <- function(title, h, windowTitle=title) {
   )
 }
 
-shinyUI(pageWithSidebar(
+shinyUI(fluidPage(
   
   headerPanel_2(
     HTML(
       '<div id="stats_header">
 			River Thermohydrographs
 			<a href="http://watershed.ucdavis.edu" target="_blank">
-      <center>
+      <left>
 			<img id="cws_logo" alt="CWS Logo" src="https://watershed.ucdavis.edu/files/cwsheader_0.png" />
-			</center>
+			</left>
       </a>
 			</div>'
     ), h3, "River Thermohydrographs"),
   
   # Sidebar with file input option and checkbox for header
   sidebarPanel(
+    
     h4("Select a River and Logging Interval: "),
     
     selectInput("sites","Sites",
@@ -34,7 +35,7 @@ shinyUI(pageWithSidebar(
     
     h6("Select year(s):"),
 
-    checkboxGroupInput(inputId="years","Available Years",choices=c(2011,2012,2013,2014),selected=c(2011,2012,2013,2014)),
+    checkboxGroupInput(inputId="years","Available Years",choices=c(2011,2012,2013,2014),selected=c(2011,2012)),
            
     tags$hr(),
     
@@ -44,17 +45,20 @@ shinyUI(pageWithSidebar(
               Regulated ("reg") sites are reaches with hydropower flows, unregulated ("unreg")
               represent "natural" flow conditions in the Sierra Nevada. Click on other tabs to view summary data
               and more about our monitoring/research.')
-        
+      
   ),
 
   
   # This is the actual output panel
   mainPanel(
-    h3(textOutput("caption")),
+    h4(textOutput("caption")),
     tabsetPanel(
       tabPanel("Plots", plotOutput("plot"), plotOutput("plot2"),plotOutput("plot3")),
-      tabPanel("Summary", verbatimTextOutput("summary"),verbatimTextOutput("struct")), 
-      tabPanel("Datatable",dataTableOutput("mytable1")),
+      tabPanel("Data Summary", verbatimTextOutput("summary"),dataTableOutput("mytable1")), 
+      tabPanel("Monitoring Locations", 
+               h5("This will be updated to a better map in the near future..."),
+               br(),
+               img(src = "studysites.png", height = 600, width = 500)),
       tabPanelAbout()
     )
   )

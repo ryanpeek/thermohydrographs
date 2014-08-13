@@ -17,26 +17,6 @@ function(){
 		),
 		br(),
 
-		div(class="row-fluid",
-# 			div(class="span4",strong('Related apps'),
-# 				p(HTML('<ul>'),
-# 					HTML('<li>'),a("Coastal Alaska Extreme Temperature and Wind Events", href="http://shiny.snap.uaf.edu/temp_wind_events/", target="_blank"),HTML('</li>'),
-# 					HTML('<li>'),a("Arctic Sea Ice Extents and Concentrations", href="http://shiny.snap.uaf.edu/sea_ice_coverage/", target="_blank"),HTML('</li>'),
-# 				HTML('</ul>')),
-# 				strong('Code'),
-# 				p('Source code available at',
-# 				a('GitHub', href="https://github.com/ua-snap/shiny-apps/tree/devel/ak_station_cru_eda", target="_blank")),
-# 				br()
-# 			),
-#         
-# 			div(class="span4", strong('Related blog posts'),
-# 				p(HTML('<ul>'),
-# 					HTML('<li>'),a("R Shiny web app: Alaska climate data EDA", href="http://blog.snap.uaf.edu/2013/05/20/r-shiny-web-app-alaska-climate-data-eda/", target="_blank"),HTML('</li>'),
-# 					HTML('<li>'),a("R Shiny web app: Coastal Alaska extreme temperature and wind events", href="http://blog.snap.uaf.edu/2013/05/20/r-shiny-web-app-extreme-events/", target="_blank"),HTML('</li>'),
-# 					HTML('<li>'),a("R Shiny web app: Arctic sea ice extents and concentrations", href="http://blog.snap.uaf.edu/2013/05/20/r-shiny-web-app-sea-ice/", target="_blank"),HTML('</li>'),
-# 				HTML('</ul>')),
-# 				br()
-# 			),
 		div(class="span4",
         strong('Code'),
         p('Source code available:',
@@ -58,7 +38,6 @@ function(){
 				  HTML('<li>'),a('Matthew Leonawicz (has some great shiny app examples)', href="http://www.snap.uaf.edu/", target="_blank"),HTML('</li>'),
 					HTML('<li>'),a('ggplot2', href="http://cran.r-project.org/web/packages/ggplot2/index.html", target="_blank"),HTML('</li>'),
 				  HTML('</ul>'))
-      )
 		)
 	)
 }

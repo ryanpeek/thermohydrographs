@@ -19,12 +19,6 @@ shinyServer(function(input, output) {
     }
   })
   
-  # a large table reactive to input
-  output$mytable1 = renderDataTable({
-    datatab<-data()
-    datatab
-  }, options=list(aLengthMenu=c(10,50,100),iDisplayLength=10))
-    
   output$caption <- renderText({
     input$caption
   })
@@ -33,12 +27,13 @@ shinyServer(function(input, output) {
     dataset<-data()
     summary(dataset)
   })
+
+  # a large table reactive to input
+  output$mytable1 = renderDataTable({
+    datatab<-data()
+    datatab
+  }, options=list(aLengthMenu=c(10,50,100),iDisplayLength=10))
   
-  output$struct <- renderPrint({ 
-      datastr<-data()
-      str(datastr)  
-  })
-    
   output$plot <- renderPlot({
     dataplot<-data()
     if(input$interval=="hourly"){
@@ -136,32 +131,32 @@ shinyServer(function(input, output) {
     }
   })
   
-  output$plot3 <- renderPlot({
-    df <- data()
-    df <- df[df$mon>=6 & df$mon<=8,]
-    if (input$interval=="d7") {      
-      d7plot<-ggplot()+ geom_line(data=df,aes(x=Datetime, y=Temperature.7),colour="black", size=0.75,alpha=1)+
-        geom_line(data=df,aes(x=Datetime, y=temp.max.7),colour="red", size=0.65,lty=2,alpha=1)+
-        scale_y_continuous(breaks=seq(0,30,3),labels=seq(0,30,3))+theme_bw()+
-        ylab(expression("Water Temperature (" * degree * "C)")) + xlab("") +
-        labs(title="7-Day Average Water Temps")+ theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-        scale_x_datetime(breaks=date_breaks("1 month"),labels = date_format("%m-%y"))+
-        geom_line(data=df,aes(x=Datetime, y=temp.min.7),colour="navyblue", size=0.65,lty=2,alpha=1)
-      print(d7plot+facet_grid(.~year,scales="free",drop=T))
-    } else {
-      if (input$interval=="daily") {
-        
-        dplot<-ggplot()+ geom_line(data=df,aes(x=Datetime, y=Temperature),colour="black", size=0.75,alpha=1)+
-          geom_line(data=df,aes(x=Datetime, y=temp.max),colour="red", size=0.65,lty=2,alpha=1)+
-          scale_y_continuous(breaks=seq(0,30,3),labels=seq(0,30,3))+theme_bw()+
-          ylab(expression("Water Temperature (" * degree * "C)")) + xlab("") +
-          labs(title="Daily Mean/Max/Min Water Temps")+ theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-          scale_x_datetime(breaks=date_breaks("1 month"),labels = date_format("%m-%y"))+
-          geom_line(data=df,aes(x=Datetime, y=temp.min),colour="navyblue", size=0.65,lty=2,alpha=1)
-        print(dplot+facet_grid(.~year,scales="free",drop=T))
-      }
-    }
-  })
+#   output$plot3 <- renderPlot({
+#     df <- data()
+#     df <- df[df$mon>=6 & df$mon<=8,]
+#     if (input$interval=="d7") {      
+#       d7plot<-ggplot()+ geom_line(data=df,aes(x=Datetime, y=Temperature.7),colour="black", size=0.75,alpha=1)+
+#         geom_line(data=df,aes(x=Datetime, y=temp.max.7),colour="red", size=0.65,lty=2,alpha=1)+
+#         scale_y_continuous(breaks=seq(0,30,3),labels=seq(0,30,3))+theme_bw()+
+#         ylab(expression("Water Temperature (" * degree * "C)")) + xlab("") +
+#         labs(title="7-Day Average Water Temps")+ theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+#         scale_x_datetime(breaks=date_breaks("1 month"),labels = date_format("%m-%y"))+
+#         geom_line(data=df,aes(x=Datetime, y=temp.min.7),colour="navyblue", size=0.65,lty=2,alpha=1)
+#       print(d7plot+facet_grid(.~year,scales="free",drop=T))
+#     } else {
+#       if (input$interval=="daily") {
+#         
+#         dplot<-ggplot()+ geom_line(data=df,aes(x=Datetime, y=Temperature),colour="black", size=0.75,alpha=1)+
+#           geom_line(data=df,aes(x=Datetime, y=temp.max),colour="red", size=0.65,lty=2,alpha=1)+
+#           scale_y_continuous(breaks=seq(0,30,3),labels=seq(0,30,3))+theme_bw()+
+#           ylab(expression("Water Temperature (" * degree * "C)")) + xlab("") +
+#           labs(title="Daily Mean/Max/Min Water Temps")+ theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+#           scale_x_datetime(breaks=date_breaks("1 month"),labels = date_format("%m-%y"))+
+#           geom_line(data=df,aes(x=Datetime, y=temp.min),colour="navyblue", size=0.65,lty=2,alpha=1)
+#         print(dplot+facet_grid(.~year,scales="free",drop=T))
+#       }
+#     }
+#   })
     
   output$downloadData <- downloadHandler(
     filename = function() { paste(input$data, '.csv', sep='') },
