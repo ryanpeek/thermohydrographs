@@ -10,6 +10,8 @@ library(lubridate)
 library(grid)
 library(scales)
 library(ggplot2)
+library(dplyr)
+library(caTools) # for 7 day means
 
 # create colors and scale for thermohydrograph
 
@@ -36,30 +38,28 @@ load("2011-2014_solinst_mainstem_hourly_compensated.RData")
 #load("2011-2013_solinst_mainstem_hourly_compensated.RData")
 load("2011-2014_solinst_mainstem_daily_compensated.RData")
 
+## make a daily "Datetime" category
+daily$Datetime<-as.POSIXct(strptime(paste0(daily$year,"-",daily$mon,"-",daily$yday),format="%Y-%m-%j"))
 
-library(dplyr)
-library(caTools) # for 7 day means
 # MAKE DAILY W DPLYR ------------------------------------------------------
-
-df<- hrly %>%
-  group_by(site,year,yday,mon)%>%
-  summarize("temp.avg"=mean(Temperature,na.rm=TRUE),
-            "temp.sd"= sd(Temperature,na.rm=TRUE),
-            "temp.cv"= (temp.sd/temp.avg),
-            "temp.min"=min(Temperature,na.rm=TRUE),
-            "temp.max"=max(Temperature,na.rm=TRUE),
-            "temp.rng" = (max(Temperature)-min(Temperature)),
-            "lev.avg"=mean(Level,na.rm=TRUE),
-            "lev.sd"= sd(Level,na.rm=TRUE),
-            "lev.cv"= (lev.sd/lev.avg),
-            "lev.min"=min(Level,na.rm=TRUE),
-            "lev.max"=max(Level,na.rm=TRUE))%>%
-  transform("lev.delt" = (lag(lev.avg)-lev.avg)/lev.avg,
-            "temp.7.avg"= runmean(temp.avg, k=7, endrule="mean",align="center"),
-            "temp.7.avg_L"= runmean(temp.avg, k=7, endrule="mean",align="left"),
-            "lev.7.avg"= runmean(lev.avg, k=7, endrule="mean",align="center"))#%>%
+# df<- hrly %>%
+#   group_by(site,year,yday,mon)%>%
+#   summarize("temp.avg"=mean(Temperature,na.rm=TRUE),
+#             "temp.sd"= sd(Temperature,na.rm=TRUE),
+#             "temp.cv"= (temp.sd/temp.avg),
+#             "temp.min"=min(Temperature,na.rm=TRUE),
+#             "temp.max"=max(Temperature,na.rm=TRUE),
+#             "temp.rng" = (max(Temperature)-min(Temperature)),
+#             "lev.avg"=mean(Level,na.rm=TRUE),
+#             "lev.sd"= sd(Level,na.rm=TRUE),
+#             "lev.cv"= (lev.sd/lev.avg),
+#             "lev.min"=min(Level,na.rm=TRUE),
+#             "lev.max"=max(Level,na.rm=TRUE))%>%
+#   transform("lev.delt" = (lag(lev.avg)-lev.avg)/lev.avg,
+#             "temp.7.avg"= runmean(temp.avg, k=7, endrule="mean",align="center"),
+#             "temp.7.avg_L"= runmean(temp.avg, k=7, endrule="mean",align="left"),
+#             "lev.7.avg"= runmean(lev.avg, k=7, endrule="mean",align="center"))#%>%
+# 
 # filter(mon>3, mon<8)
 # s(df)
 # daily<-df
-# save(daily, file="./data/processed/RDATA/2011-2014_solinst_mainstem_daily_compensated.RData")
-# write.csv(daily, file="./data/processed/combined/2011-2014_solinst_mainstem_daily_compensated.csv",row.names=FALSE)

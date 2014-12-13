@@ -4,7 +4,7 @@ shinyServer(function(input, output) {
   
   data <- reactive({
     if(input$interval=="hourly"){
-      h <- hourly[hourly$site %in% input$sites & hourly$year %in% input$years,]
+      h <- hrly[hrly$site %in% input$sites & hrly$year %in% input$years,]
       h
     } else {
       if(input$interval=="daily"){
@@ -12,7 +12,7 @@ shinyServer(function(input, output) {
         d
       } else {
         if(input$interval=="d7"){
-          d7 <- daily[daily$site %in% input$sites & daily$year %in% input$years, c(1,4:7,12:17)]
+          d7 <- daily[daily$site %in% input$sites & daily$year %in% input$years,]
           d7
         }
       }
@@ -59,7 +59,7 @@ shinyServer(function(input, output) {
         idx<-c(1,diff(dataplot$Datetime)) # make a diff column
         i2<-c(1,which(idx!=1),nrow(dataplot)+1) # compare which rows are are not diff by 15 min
         dataplot$grp<-rep(1:length(diff(i2)),diff(i2)) #use group to assign each portion of plotted line
-        thermoday<-(ggplot() + geom_line(data=dataplot,aes(group=grp, x=Datetime, y=Level, colour=Temperature), size=0.75,alpha=1) +
+        thermoday<-(ggplot() + geom_line(data=dataplot,aes(group=grp, x=Datetime, y=lev.avg, colour=temp.avg), size=0.75,alpha=1) +
                       ylab("Stage (m)") + xlab("") +                     
                       scale_x_datetime(breaks=date_breaks("1 months"),labels = date_format("%b-%y"))+
                       scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette), 
@@ -71,10 +71,10 @@ shinyServer(function(input, output) {
         print(thermoday)
       } else {
         # TO FILTER OUT DISCONTINUOUS DATA use breaks as groups and add to aes()
-        idx<-c(1,diff(dataplot$Datetime)) # make a diff column
-        i2<-c(1,which(idx!=1),nrow(dataplot)+1) # compare which rows are are not diff by 15 min
-        dataplot$grp<-rep(1:length(diff(i2)),diff(i2)) #use group to assign each portion of plotted line
-        thermohydro2<-(ggplot() + geom_line(data=dataplot,aes(group=grp,x=Datetime, y=Level.7, colour=Temperature.7), size=0.85,alpha=1) +
+#         idx<-c(1,diff(dataplot$Datetime)) # make a diff column
+#         i2<-c(1,which(idx!=1),nrow(dataplot)+1) # compare which rows are are not diff by 15 min
+#         dataplot$grp<-rep(1:length(diff(i2)),diff(i2)) #use group to assign each portion of plotted line
+        thermohydro2<-(ggplot() + geom_line(data=dataplot,aes(x=Datetime, y=lev.7.avg, colour=temp.7.avg), size=0.85,alpha=1) +
                          ylab("Stage (m)") + xlab("") +
                          scale_x_datetime(breaks=date_breaks("1 months"),labels = date_format("%b-%y"))+
                          scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette), 
@@ -104,10 +104,10 @@ shinyServer(function(input, output) {
       print(thermo1 + facet_grid(.~year,scales="free",drop=T))
     } else {
       if(input$interval=="daily"){
-        thermo2<- ggplot() + geom_line(data=dataplot[dataplot$mon>5 & dataplot$mon<9,],aes(x=Datetime, y=Temperature, colour=Temperature), size=0.85,alpha=1) +
+        thermo2<- ggplot() + geom_line(data=dataplot[dataplot$mon>5 & dataplot$mon<9,],aes(x=Datetime, y=temp.avg, colour=temp.avg), size=0.85,alpha=1) +
           ylab(expression("Water Temperature (" * degree * "C)")) + xlab("") +
           scale_y_continuous(breaks=seq(0,30,3),labels=seq(0,30,3))+
-          stat_smooth(data=dataplot[dataplot$mon>5 & dataplot$mon<9,], aes(x=Datetime, y=Temperature),color="gray50",alpha=0.5)+
+          stat_smooth(data=dataplot[dataplot$mon>5 & dataplot$mon<9,], aes(x=Datetime, y=temp.avg),color="gray50",alpha=0.5)+
           scale_x_datetime(breaks=date_breaks("2 weeks"),labels = date_format("%m-%d"))+
           scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette),
                                  values=breaks, rescaler = function(x, ...) x,
@@ -116,10 +116,10 @@ shinyServer(function(input, output) {
         print(thermo2 + facet_grid(.~year,scales="free",drop=T))        
       } else {
         if(input$interval=="d7"){
-          thermo3<- ggplot() + geom_line(data=dataplot[dataplot$mon>5 & dataplot$mon<9,],aes(x=Datetime, y=Temperature.7, colour=Temperature.7), size=0.85,alpha=1) +
+          thermo3<- ggplot() + geom_line(data=dataplot[dataplot$mon>5 & dataplot$mon<9,],aes(x=Datetime, y=temp.7.avg, colour=temp.7.avg), size=0.85,alpha=1) +
             ylab(expression("Water Temperature (" * degree * "C)")) + xlab("") +
             scale_y_continuous(breaks=seq(0,30,3),labels=seq(0,30,3))+
-            stat_smooth(data=dataplot[dataplot$mon>5 & dataplot$mon<9,], aes(x=Datetime, y=Temperature.7),color="gray50",alpha=0.5)+
+            stat_smooth(data=dataplot[dataplot$mon>5 & dataplot$mon<9,], aes(x=Datetime, y=temp.7.avg),color="gray50",alpha=0.5)+
             scale_x_datetime(breaks=date_breaks("2 weeks"),labels = date_format("%m-%d"))+
             scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette),
                                    values=breaks, rescaler = function(x, ...) x,

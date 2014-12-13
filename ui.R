@@ -36,7 +36,12 @@ shinyUI(fluidPage(
     h6("Select year(s):"),
 
     checkboxGroupInput(inputId="years","Available Years",choices=c(2011,2012,2013,2014),selected=c(2011,2012)),
-           
+    checkboxInput("singlemon",label = "Select a Month",value = FALSE),
+    conditionalPanel(condition = "input.singlemon == true",
+                     sliderInput("mon",label="Month",
+                                 min=1,max=12, value=6, step=1)
+    ),
+        
     tags$hr(),
     
     downloadButton('downloadData', 'Download as csv'),
