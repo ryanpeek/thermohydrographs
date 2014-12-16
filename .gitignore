@@ -1,9 +1,3 @@
-# History files
 .Rhistory
-# R Project
-.Rproj
-# R Data
-.RData
-.Rproj.user
-thermohydrographs.Rproj
+/.Rproj
 shinyapps

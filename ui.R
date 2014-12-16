@@ -24,7 +24,7 @@ shinyUI(fluidPage(
   # Sidebar with file input option and checkbox for header
   sidebarPanel(
     
-    h4("Select a River and Logging Interval: "),
+    h4("Select a River & Logging Interval: "),
     
     selectInput("sites","Sites",
                 list("NF American (unreg)" = "NFA", "MF American (reg)" = "MFA", "Rubicon (reg)" = "RUB", 
@@ -39,7 +39,7 @@ shinyUI(fluidPage(
     checkboxInput("singlemon",label = "Select a Month",value = FALSE),
     conditionalPanel(condition = "input.singlemon == true",
                      sliderInput("mon",label="Month",
-                                 min=1,max=12, value=6, step=1)
+                                 min=3,max=10, value=6, step=NULL)
     ),
         
     tags$hr(),
@@ -49,7 +49,9 @@ shinyUI(fluidPage(
     helpText('These plots represent stage (y-axis) and water temperature (color). 
               Regulated ("reg") sites are reaches with hydropower flows, unregulated ("unreg")
               represent "natural" flow conditions in the Sierra Nevada. Click on other tabs to view summary data
-              and more about our monitoring/research.')
+              and more about our monitoring/research.'),
+    tags$hr(),
+    helpText('Data updated 12/15/2014')
       
   ),
 
