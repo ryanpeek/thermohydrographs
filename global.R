@@ -1,17 +1,24 @@
 ## SHINY API: Thermohydrographs
 
+#install.packages("dplyr", lib="./data/Rpackages/")
+
 library(shiny)
-pkgs <- c("lubridate","grid","scales","ggplot2") # list packages
+# pkgs <- c("lubridate","grid","scales","ggplot2") # list packages
 
 # install packages
-pkgs <- pkgs[!(pkgs %in% installed.packages()[,"Package"])]
-if(length(pkgs)) install.packages(pkgs,repos="http://cran.cs.wwu.edu/")
+# pkgs <- pkgs[!(pkgs %in% installed.packages()[,"Package"])]
+# if(length(pkgs)) install.packages(pkgs,repos="http://cran.cs.wwu.edu/")
 library(lubridate)
 library(grid)
 library(scales)
 library(ggplot2)
 library(dplyr)
 library(caTools) # for 7 day means
+library(maptools)
+library(leaflet)
+library(rgdal)
+library(markdown)
+library(knitr)
 
 # create colors and scale for thermohydrograph
 

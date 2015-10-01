@@ -62,10 +62,10 @@ shinyUI(fluidPage(
     tabsetPanel(
       tabPanel("Plots", plotOutput("plot"), plotOutput("plot2"),plotOutput("plot3")),
       tabPanel("Data Summary", verbatimTextOutput("summary"),dataTableOutput("mytable1")), 
-      tabPanel("Monitoring Locations", 
-               h5("This will be updated to a better map in the near future..."),
-               br(),
-               img(src = "studysites.png", height = 600, width = 500)),
+      tabPanel(
+        "Monitoring Locations",leafletOutput("map"),
+        h5("Long Term River Monitoring Locations")
+      ),
       tabPanelAbout()
     )
   )

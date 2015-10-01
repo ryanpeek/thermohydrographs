@@ -13,7 +13,8 @@ function(){
 		strong('Author'),
 		p('Ryan Peek',br(),
 			'Aquatic Ecologist',br(),
-			a('Center for Watershed Sciences', href="http://watershed.ucdavis.edu/", target="_blank")
+			a('Center for Watershed Sciences', href="http://watershed.ucdavis.edu/", target="_blank"),
+			img(src="CWS.png",height=72,width=72)
 		),
 		br(),
 

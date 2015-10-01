@@ -190,7 +190,28 @@ shinyServer(function(input, output) {
 #       }
 #     }
 #   })
-  
+ 
+  output$map = renderLeaflet({
+    
+    # make map of Sites 
+    
+    # projections
+    wgs84<-"+proj=longlat +datum=WGS84"
+
+    # read in some shapefiles and make spatial
+    pts <- readShapePoints("shps/CWS_monitoring_sites.shp", proj4string=CRS(wgs84))
+    #ptsCNA_clipped <- spTransform(ptsCNA_clipped, CRS("+proj=longlat +datum=NAD83"))
+    
+    pts_bbox <- readShapePoints("shps/CWS_monitoring_sites.shp", proj4string=CRS(wgs84))
+    #ptsCNA_bbox <- spTransform(ptsCNA_bbox, CRS("+proj=longlat +datum=NAD83"))
+    
+    
+    leaflet() %>% addTiles() %>% 
+      #setView(-124.0625, 40.6875, 10) %>%
+      addCircles(data=pts, weight=10, color= "yellow") %>% 
+      addMarkers(data=pts_bbox, popup = ptsCNA_clipped@data$Name)
+  })
+
   output$downloadData <- downloadHandler(
     filename = function() { paste(input$data, '.csv', sep='') },
     content = function(file) {
