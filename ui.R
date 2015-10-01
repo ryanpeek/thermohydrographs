@@ -1,4 +1,5 @@
 library(shiny)
+library(leaflet)
 tabPanelAbout <- source("about.r")$value
 headerPanel_2 <- function(title, h, windowTitle=title) {    
   tagList(

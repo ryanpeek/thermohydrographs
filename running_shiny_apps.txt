@@ -13,6 +13,7 @@ shinyapps::setAccountInfo(name="aquapeek", token="454252EE1B63A5BF6F3FD7387CF18F
 runApp()
 
 ## or with
+library(rsconnect)
 deployApp()
 
 ## for large apps need to start default with more memory:
@@ -26,4 +27,4 @@ xxlarge			 4096 MB
 
 shinyapps::configureApp("thermohydrographs", size="medium")
 
-# ryan-ucd "R00neySc0res!"
+# ryan-ucd "Ays0ba1124"
