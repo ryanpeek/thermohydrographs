@@ -209,7 +209,7 @@ shinyServer(function(input, output) {
     leaflet() %>% addTiles() %>% 
       #setView(-124.0625, 40.6875, 10) %>%
       addCircles(data=pts, weight=10, color= "yellow") %>% 
-      addMarkers(data=pts_bbox, popup = ptsCNA_clipped@data$Name)
+      addMarkers(data=pts_bbox, popup = pts@data$Name)
   })
 
   output$downloadData <- downloadHandler(
