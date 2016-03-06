@@ -1,13 +1,7 @@
 ## SHINY API: Thermohydrographs
 
-#install.packages("dplyr", lib="./data/Rpackages/")
-
+# load packages
 library(shiny)
-# pkgs <- c("lubridate","grid","scales","ggplot2") # list packages
-
-# install packages
-# pkgs <- pkgs[!(pkgs %in% installed.packages()[,"Package"])]
-# if(length(pkgs)) install.packages(pkgs,repos="http://cran.cs.wwu.edu/")
 library(lubridate)
 library(grid)
 library(scales)
@@ -20,7 +14,7 @@ library(rgdal)
 library(markdown)
 library(knitr)
 
-# create colors and scale for thermohydrograph
+# CREATE COLORS & SCALES FOR THERMOHYDROGRAPHS ----------------------------
 
 ## FOR COLD TEMPS
 breaks.cold<-(c(0,2,4,6,8,10,12,14)) # for color scale
@@ -35,38 +29,48 @@ palette<-c("black","midnightblue","blue","deepskyblue2",
 breaks.4<-(c(0,4,8,12,16,20,24,28)) 
 palette.4<-c("dark blue","blue","light blue","green","yellow","orange","orangered","brown4")
 
-
 ## FOR WARMER TEMPS
 breaks.warm<-(c(0,4,8,12,16,20,24,28,32,36)) # for color scale
 palette.warm<-c("dark blue","blue","light blue","green","yellow","orange","orangered","darkred","maroon","gray40","gray5")
 
-# load data
-load("2011-2014_solinst_mainstem_hourly_compensated.RData")
-#load("2011-2013_solinst_mainstem_hourly_compensated.RData")
-load("2011-2014_solinst_mainstem_daily_compensated.RData")
 
-## make a daily "Datetime" category
-daily$Datetime<-as.POSIXct(strptime(paste0(daily$year,"-",daily$mon,"-",daily$yday),format="%Y-%m-%j"))
+# LOAD DATA ---------------------------------------------------------------
+
+load("2011-2015_solinst_mainstem_hourly_compensated.rda")
+
+# load water year day, water year functions
+source("doy.R")
+hrly <- add_WYD(hrly2, "Datetime")  # add DOY, WY, WYD cols
+
+## remove old cols and re-add/rename:
+hrly<-select(hrly, Datetime:WY, DOY, DOWY, grp) %>% as.data.frame()
+
+# convert to numeric from list
+hrly[,c("WY","DOY","DOWY")]<-apply(hrly[,c("WY","DOY","DOWY")], 2,FUN =  as.numeric)
+
+# make a daily "Datetime" category
+# daily$Datetime<-as.POSIXct(strptime(paste0(daily$year,"-",daily$mon,"-",daily$yday),format="%Y-%m-%j"))
 
 # MAKE DAILY W DPLYR ------------------------------------------------------
-# df<- hrly %>%
-#   group_by(site,year,yday,mon)%>%
-#   summarize("temp.avg"=mean(Temperature,na.rm=TRUE),
-#             "temp.sd"= sd(Temperature,na.rm=TRUE),
-#             "temp.cv"= (temp.sd/temp.avg),
-#             "temp.min"=min(Temperature,na.rm=TRUE),
-#             "temp.max"=max(Temperature,na.rm=TRUE),
-#             "temp.rng" = (max(Temperature)-min(Temperature)),
-#             "lev.avg"=mean(Level,na.rm=TRUE),
-#             "lev.sd"= sd(Level,na.rm=TRUE),
-#             "lev.cv"= (lev.sd/lev.avg),
-#             "lev.min"=min(Level,na.rm=TRUE),
-#             "lev.max"=max(Level,na.rm=TRUE))%>%
-#   transform("lev.delt" = (lag(lev.avg)-lev.avg)/lev.avg,
-#             "temp.7.avg"= runmean(temp.avg, k=7, endrule="mean",align="center"),
-#             "temp.7.avg_L"= runmean(temp.avg, k=7, endrule="mean",align="left"),
-#             "lev.7.avg"= runmean(lev.avg, k=7, endrule="mean",align="center"))#%>%
-# 
-# filter(mon>3, mon<8)
-# s(df)
-# daily<-df
+
+daily<- hrly %>%
+  group_by(site,year, DOY, DOWY, WY, mon)%>%
+  summarize("temp.avg"=mean(Temperature,na.rm=TRUE),
+            "temp.sd"= sd(Temperature,na.rm=TRUE),
+            "temp.cv"= (temp.sd/temp.avg),
+            "temp.min"=min(Temperature,na.rm=TRUE),
+            "temp.max"=max(Temperature,na.rm=TRUE),
+            "temp.rng" = (max(Temperature)-min(Temperature)),
+            "lev.avg"=mean(Level,na.rm=TRUE),
+            "lev.sd"= sd(Level,na.rm=TRUE),
+            "lev.cv"= (lev.sd/lev.avg),
+            "lev.min"=min(Level,na.rm=TRUE),
+            "lev.max"=max(Level,na.rm=TRUE))%>%
+  transform("lev.delt" = (lag(lev.avg)-lev.avg)/lev.avg,
+            "temp.7.avg"= runmean(temp.avg, k=7, endrule="mean",align="center"),
+            "temp.7.avg_L"= runmean(temp.avg, k=7, endrule="mean",align="left"),
+            "lev.7.avg"= runmean(lev.avg, k=7, endrule="mean",align="center")) %>%
+  mutate("Datetime" = as.POSIXct(strptime(paste0(year,"-", mon,"-", DOY), format="%Y-%m-%j")))
+
+
+daily<-df
