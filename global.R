@@ -2,17 +2,27 @@
 
 # load packages
 library(shiny)
-library(lubridate)
-library(grid)
-library(scales)
-library(ggplot2)
-library(dplyr)
+library(lubridate) # time manipulation
+library(scales) # better scales 
+library(grid) # don't remember
+library(ggplot2) # plotting
+library(dplyr) # everything
 library(caTools) # for 7 day means
-library(maptools)
-library(leaflet)
-library(rgdal)
+library(leaflet) # making a dynamic map
+
+# spatial 
+library(sf)
+#library(rgdal) # for shapefiles
+
 library(markdown)
 library(knitr)
+
+# to install packages
+# if(!require("viridis")){ install.packages(viridis)}
+# library(viridis)
+#library(viridis) # colors
+
+source("f_doy.R") # function to make water year calendar
 
 # CREATE COLORS & SCALES FOR THERMOHYDROGRAPHS ----------------------------
 
@@ -35,42 +45,69 @@ palette.warm<-c("dark blue","blue","light blue","green","yellow","orange","orang
 
 
 # LOAD DATA ---------------------------------------------------------------
+load("2011-2016_solinst_mainstem_hrly_compensated.rda")
 
-load("2011-2015_solinst_mainstem_hourly_compensated.rda")
+load("daily_flow_cfs_data_6sites.rda") 
+flowdf <- flowdf %>%
+  mutate("flow_cms"=flow_cfs*0.028316847)
 
-# load water year day, water year functions
-source("doy.R")
-hrly <- add_WYD(hrly2, "Datetime")  # add DOY, WY, WYD cols
+#load("2011-2015_solinst_mainstem_hourly_compensated.rda")
 
-## remove old cols and re-add/rename:
-hrly<-select(hrly, Datetime:WY, DOY, DOWY, grp) %>% as.data.frame()
+hrly  <- hr.df2 # rename to simple name
 
-# convert to numeric from list
-hrly[,c("WY","DOY","DOWY")]<-apply(hrly[,c("WY","DOY","DOWY")], 2,FUN =  as.numeric)
+# TEST PLOTS --------------------------------------------------------------
+# 
+# # compensated/adj STAGE:
+# ggplot() + 
+#   geom_line(data=hr.df2, 
+#             aes(x=datetime, y=level_comp, color=site, group=WY)) +
+#   facet_grid(site~., scales="free")
+# 
+# # uncompensated/adj STAGE:
+# ggplot() + 
+#   geom_line(data=hr.df2, 
+#             aes(x=datetime, y=level, color=site, group=WY)) +
+#   facet_grid(site~., scales="free")
+# 
+# # daily flow
+# ggplot() + 
+#   geom_line(data=flowdf[flowdf$WY>2009,], 
+#             aes(x=date, y=log(flow_cfs), color=site, group=WY)) +
+#   facet_grid(site~., scales="free_y")
 
-# make a daily "Datetime" category
-# daily$Datetime<-as.POSIXct(strptime(paste0(daily$year,"-",daily$mon,"-",daily$yday),format="%Y-%m-%j"))
 
 # MAKE DAILY W DPLYR ------------------------------------------------------
 
 daily<- hrly %>%
-  group_by(site,year, DOY, DOWY, WY, mon)%>%
-  summarize("temp.avg"=mean(Temperature,na.rm=TRUE),
-            "temp.sd"= sd(Temperature,na.rm=TRUE),
+  mutate(date = floor_date(datetime, unit = "hour")) %>% 
+  group_by(site, date) %>%
+  summarize("temp.avg"=mean(temp_C,na.rm=TRUE),
+            "temp.sd"= sd(temp_C,na.rm=TRUE),
             "temp.cv"= (temp.sd/temp.avg),
-            "temp.min"=min(Temperature,na.rm=TRUE),
-            "temp.max"=max(Temperature,na.rm=TRUE),
-            "temp.rng" = (max(Temperature)-min(Temperature)),
-            "lev.avg"=mean(Level,na.rm=TRUE),
-            "lev.sd"= sd(Level,na.rm=TRUE),
+            "temp.min"=min(temp_C,na.rm=TRUE),
+            "temp.max"=max(temp_C,na.rm=TRUE),
+            "temp.rng" = (max(temp_C)-min(temp_C)),
+            "lev.avg"=mean(level_comp,na.rm=TRUE),
+            "lev.sd"= sd(level_comp,na.rm=TRUE),
             "lev.cv"= (lev.sd/lev.avg),
-            "lev.min"=min(Level,na.rm=TRUE),
-            "lev.max"=max(Level,na.rm=TRUE))%>%
+            "lev.min"=min(level_comp,na.rm=TRUE),
+            "lev.max"=max(level_comp,na.rm=TRUE))%>%
   transform("lev.delt" = (lag(lev.avg)-lev.avg)/lev.avg,
             "temp.7.avg"= runmean(temp.avg, k=7, endrule="mean",align="center"),
             "temp.7.avg_L"= runmean(temp.avg, k=7, endrule="mean",align="left"),
             "lev.7.avg"= runmean(lev.avg, k=7, endrule="mean",align="center")) %>%
-  mutate("Datetime" = as.POSIXct(strptime(paste0(year,"-", mon,"-", DOY), format="%Y-%m-%j")))
+  add_WYD(., "date")
 
 
-daily<-df
+#daily<-df
+
+
+# QUICK PLOT --------------------------------------------------------------
+
+# daily stage
+#ggplot(daily) + geom_line(aes(date, lev.avg, group=WY, color=site)) + viridis::scale_color_viridis(discrete = T) + facet_grid(site~.)
+
+
+# daily flow
+# ggplot(flowdf[flowdf$WY>2010,]) + geom_line(aes(date, flow_cms+1, color=site)) + viridis::scale_color_viridis("Site", discrete = T) + facet_grid(site~.) + scale_y_log10() + ylab("Log(Flow) (cms)") + xlab("")
+

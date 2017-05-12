@@ -28,21 +28,21 @@ shinyUI(fluidPage(
     h4("Select a River & Logging Interval: "),
     
     selectInput("sites","Sites",
-                list("NF American (unreg)" = "NFA", "MF American (reg)" = "MFA", "Rubicon (reg)" = "RUB", 
-                     "NF Yuba (unreg)" = "NFY", "SF Yuba (reg)" = "SFY", "Clavey (unreg)" = "CLA", 
-                     "Tuolumne at Clavey (reg)"= "TUO")),
+                list("NF American (unreg)" = "NFA", 
+                     "MF American (reg)" = "MFA", "Rubicon (reg)" = "RUB", 
+                     "NF Yuba (unreg)" = "NFY", "SF Yuba (reg)" = "SFY", 
+                     "Clavey (unreg)" = "CLA", "Tuolumne at Clavey (reg)"= "TUO")),
     selectInput("interval","Logging Interval",
-                list("Hourly" = "hourly", "Daily" = "daily", "7-day Avg" = "d7")),
+                list("Hourly" = "hourly", 
+                     "Daily" = "daily", 
+                     "7-day Avg" = "d7")),
     
     h6("Select year(s):"),
 
-    checkboxGroupInput(inputId="years","Available Years",choices=c(2011,2012,2013,2014),selected=c(2011,2012)),
-    checkboxInput("singlemon",label = "Select a Month",value = FALSE),
-    conditionalPanel(condition = "input.singlemon == true",
-                     sliderInput("mon",label="Month",
-                                 min=3,max=10, value=6, step=NULL)
-    ),
-        
+    checkboxGroupInput(inputId="years","Available Years",
+                       choices=c(2011,2012,2013,
+                                 2014,2015,2016),selected=c(2014,2015)),
+
     tags$hr(),
     
     downloadButton('downloadData', 'Download as csv'),
@@ -52,7 +52,7 @@ shinyUI(fluidPage(
               represent "natural" flow conditions in the Sierra Nevada. Click on other tabs to view summary data
               and more about our monitoring/research.'),
     tags$hr(),
-    helpText('Data updated 12/15/2014')
+    helpText('Data updated 05/15/2017')
       
   ),
 
