@@ -10,7 +10,14 @@ library(dplyr) # everything
 library(caTools) # for 7 day means
 library(leaflet) # making a dynamic map
 
-# spatial 
+# widgets 
+# if(!require("htmlwidgets")) {install.packages("htmlwidgets", lib="/Rpackages/")}
+# library(htmlwidgets, lib.loc="/Rpackages/")
+# 
+# # spatial 
+# if(!require("sf")) {install.packages("sf", lib="/Rpackages/")}
+# library(sf, lib.loc="/Rpackages/")
+
 library(sf)
 #library(rgdal) # for shapefiles
 
@@ -79,7 +86,7 @@ hrly  <- hr.df2 # rename to simple name
 # MAKE DAILY W DPLYR ------------------------------------------------------
 
 daily<- hrly %>%
-  mutate(date = floor_date(datetime, unit = "hour")) %>% 
+  mutate(date = floor_date(datetime, unit = "day")) %>% 
   group_by(site, date) %>%
   summarize("temp.avg"=mean(temp_C,na.rm=TRUE),
             "temp.sd"= sd(temp_C,na.rm=TRUE),
@@ -93,9 +100,9 @@ daily<- hrly %>%
             "lev.min"=min(level_comp,na.rm=TRUE),
             "lev.max"=max(level_comp,na.rm=TRUE))%>%
   transform("lev.delt" = (lag(lev.avg)-lev.avg)/lev.avg,
-            "temp.7.avg"= runmean(temp.avg, k=7, endrule="mean",align="center"),
+            "temp.7.avg"= runmean(temp.avg, k=7, endrule="mean",align="left"),
             "temp.7.avg_L"= runmean(temp.avg, k=7, endrule="mean",align="left"),
-            "lev.7.avg"= runmean(lev.avg, k=7, endrule="mean",align="center")) %>%
+            "lev.7.avg"= runmean(lev.avg, k=7, endrule="mean",align="left")) %>%
   add_WYD(., "date")
 
 
