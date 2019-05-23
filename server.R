@@ -41,20 +41,18 @@ shinyServer(function(input, output) {
 
       # Plot
       thermohydro1<-(ggplot() + 
+                       geom_linerange(data=dataplot, 
+                                 aes(x=datetime, ymin=0, ymax=level_comp, colour=temp_C),
+                                 size=0.65, alpha=.6) +
                        geom_line(data=dataplot, 
-                                 aes(x=datetime, y=level_comp, colour=temp_C),
-                                 size=0.65, alpha=1) +
+                                 aes(x=datetime, y=level_comp),
+                                 size=0.4, alpha=1) +
                        ylab("Stage (m)") + xlab("") +
                        scale_x_datetime(breaks=date_breaks("1 months"),
                                         labels = date_format("%b")) +
-
                        scale_colour_gradientn("Water \nTemp (C)",
-                                              colours=palette(palette),
-                                              values=breaks, 
-                                              rescaler = function(x, ...) x,
-                                              oob = identity,limits=c(0,30),
-                                              breaks=breaks, 
-                                              space="Lab") + 
+                                              colours=viridis(30, option="A"),
+                                              breaks=breaks, limits=c(0,30)) + 
                        theme_bw() + labs(title="Hourly Thermohydrograph")+
                        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
                        facet_grid(.~WY, scales = "free_x"))
@@ -64,9 +62,11 @@ shinyServer(function(input, output) {
       if(input$interval=="daily"){
 
         thermoday<-(ggplot() + 
-                      geom_line(data=dataplot, aes(x=as.Date(date), y=lev.avg,
+                      geom_linerange(data=dataplot, aes(x=as.Date(date), ymin=0, ymax=lev.avg,
                                                    colour=temp.avg),
-                                size=0.75,alpha=1) +
+                                size=0.75,alpha=0.6) +
+                      geom_line(data=dataplot, aes(x=as.Date(date), y=lev.avg),
+                                size=0.4, alpha=1) +
                       ylab("Stage (m)") + xlab("") + 
                       # scale_x_continuous(breaks=c(182,213,244,274,305, 
                       #                             335,1,32,60,92,122,152), 
@@ -75,30 +75,26 @@ shinyServer(function(input, output) {
                       #                             "Mar-1","Apr-1","May-1","Jun-1"))+
                       scale_x_date(breaks=date_breaks("1 months"),
                                    labels = date_format("%b"))+
-                      scale_colour_gradientn("Water \nTemp (C)", 
-                                             colours=palette(palette), 
-                                             values=breaks, 
-                                             rescaler = function(x, ...) x,
-                                             oob = identity,limits=c(0,30), 
-                                             breaks=breaks, space="Lab") +
+                      scale_colour_gradientn("Water \nTemp (C)",
+                                             colours=viridis(30, option="A"),
+                                             breaks=breaks, limits=c(0,30)) + 
                       theme_bw() + labs(title="Daily Thermohydrograph") +
                       theme(axis.text.x = element_text(angle = 45, hjust = 1))+
                       facet_grid(.~WY, scales="free_x"))
         print(thermoday)
       } else {
         thermohydro2<-(ggplot() + 
-                         geom_line(data=dataplot,
-                                   aes(x=as.Date(date), y=lev.7.avg,
-                                       colour=temp.7.avg), size=0.85,alpha=1) +
+                         geom_linerange(data=dataplot,
+                                   aes(x=as.Date(date), ymin=0, ymax=lev.7.avg,
+                                       colour=temp.7.avg), size=0.85, alpha=0.6) +
+                         geom_line(data=dataplot, aes(x=as.Date(date), ymax=lev.7.avg),
+                                   size=0.4, alpha=1) +
                          ylab("Stage (m)") + xlab("") +
                          scale_x_date(breaks=date_breaks("1 months"),
                                       labels = date_format("%b")) +
                          scale_colour_gradientn("Water \nTemp (C)",
-                                                colours=palette(palette), 
-                                                values=breaks, 
-                                                rescaler = function(x, ...) x,
-                                                oob = identity,limits=c(0,30), 
-                                                breaks=breaks, space="Lab") + 
+                                                colours=viridis(30, option="A"),
+                                                breaks=breaks, limits=c(0,30)) + 
                          theme_bw() + labs(title="7 Day Average Thermohydrograph") +
                          theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
                          facet_grid(.~WY,scales="free_x"))
@@ -122,10 +118,9 @@ shinyServer(function(input, output) {
                     aes(x=datetime, y=temp_C), color="gray50",alpha=0.5) +
         scale_x_datetime(breaks=date_breaks("1 month"),
                          labels = date_format("%b")) +
-        scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette),
-                               values=breaks, rescaler = function(x, ...) x,
-                               oob = identity,limits=c(0,30), 
-                               breaks=breaks, space="Lab") +
+        scale_colour_gradientn("Water \nTemp (C)",
+                               colours=viridis(30, option="A"),
+                               breaks=breaks, limits=c(0,30)) + 
         theme_bw() + labs(title="Hourly Water Temps") + 
         theme(axis.text.x = element_text(angle = 45, hjust = 1))
       
@@ -146,10 +141,9 @@ shinyServer(function(input, output) {
                       color="gray50",alpha=0.5) +
           scale_x_date(breaks=date_breaks("1 month"), 
                            labels = date_format("%b")) +
-          scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette),
-                                 values=breaks, rescaler = function(x, ...) x,
-                                 oob = identity,limits=c(0,30), 
-                                 breaks=breaks, space="Lab") +
+          scale_colour_gradientn("Water \nTemp (C)",
+                                 colours=viridis(30, option="A"),
+                                 breaks=breaks, limits=c(0,30)) + 
           theme_bw() + labs(title="Daily Water Temps") + 
           theme(axis.text.x = element_text(angle = 45, hjust = 1))      
         print(thermo2 + facet_grid(.~WY,scales="free",drop=T))        
@@ -161,18 +155,18 @@ shinyServer(function(input, output) {
                       aes(x=as.Date(date), y=temp.7.avg, 
                                         colour=temp.7.avg), size=0.85,alpha=1) +
             ylab(expression("Water Temperature (" * degree * "C)")) + xlab("") +
-            scale_y_continuous(breaks=seq(0,30,3),labels=seq(0,30,3), 
-                               limits = c(0,30)) +
+            scale_y_continuous(breaks=seq(0,30,3),
+                               labels=seq(0,30,3))+ 
+                               #limits = c(0,30)) +
             stat_smooth(data=dataplot[month(dataplot$date)>3 & 
                                         month(dataplot$date)<10,], 
                         aes(x=as.Date(date), y=temp.7.avg), 
                         color="gray50",alpha=0.5)+
             scale_x_date(breaks=date_breaks("1 month"), 
                              labels = date_format("%b")) +
-            scale_colour_gradientn("Water \nTemp (C)",colours=palette(palette),
-                                   values=breaks, rescaler = function(x, ...) x,
-                                   oob = identity,limits=c(0,30), 
-                                   breaks=breaks, space="Lab") +
+            scale_colour_gradientn("Water \nTemp (C)",
+                                   colours=viridis(30, option="A"),
+                                   breaks=breaks, limits=c(0,30)) + 
             theme_bw() + labs(title="7-Day Average Water Temps") + 
             theme(axis.text.x = element_text(angle = 45, hjust = 1))      
           print(thermo3 + facet_grid(.~WY,scales="free",drop=T))        
