@@ -52,7 +52,7 @@ shinyUI(fluidPage(
               represent "natural" flow conditions in the Sierra Nevada. Click on other tabs to view summary data
               and more about our monitoring/research.'),
     tags$hr(),
-    helpText('Data updated 05/15/2017')
+    helpText('Data updated 05/23/2019')
       
   ),
 
