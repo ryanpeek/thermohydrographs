@@ -14,7 +14,7 @@ tabPanel("About",
               Aquatic Ecologist at Center for Watershed Sciences |  PhD Candidate in Ecology, UC Davis<br/>
               <a href="https://twitter.com/riverpeek" target="_blank">Twitter</a> | 
               <a href="http://watershed.ucdavis.edu/", target="_blank">Center for Watershed Sciences</a> |
-              <a href="http://naturesconfluence.com" target="_blank">Blog</a> |
+              <a href="http://ryanpeek.github.io" target="_blank">Website</a> |
               </p>'),
          
 
